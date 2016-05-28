@@ -58,7 +58,7 @@ app.get("/api/todos", function(req, res) {
 app.post("/api/todos", function(req, res) {
   var newTodo = req.body;
 
-  if (!(req.body.todoDescription)) {
+  if (!(req.body.description)) {
     res.send(err);
   }
 
