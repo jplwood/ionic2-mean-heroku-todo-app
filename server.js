@@ -25,7 +25,7 @@ mongoClient.connect(MONGODB_URI, function (err, database) {
   }
 
   db = database; // Our database object from mLab
-  collection = db.collection("todos"); // Our todos collection
+  //collection = db.collection("todos"); // Our todos collection
 
   console.log("Database connection ready");
 
@@ -45,7 +45,7 @@ mongoClient.connect(MONGODB_URI, function (err, database) {
 
 // GET: retrieve all todos
 app.get("/api/todos", function(req, res) {
-  collection.find({}).toArray(function(err, docs) {
+  db.collection("todos").find({}).toArray(function(err, docs) {
     if (err) {
       res.send(err);
     } else {
@@ -62,7 +62,7 @@ app.post("/api/todos", function(req, res) {
     res.send(err);
   }
 
-  collection.insertOne(newTodo, function(err, doc) {
+  db.collection("todos").insertOne(newTodo, function(err, doc) {
     if (err) {
       res.send(err);
     } else {
@@ -76,7 +76,7 @@ app.post("/api/todos", function(req, res) {
 
 // GET: retrieve a todo by id
 app.get("/api/todos/:id", function(req, res) {
-  collection.findOne({ _id: new objectID(req.params.id) }, function(err, doc) {
+  db.collection("todos").findOne({ _id: new objectID(req.params.id) }, function(err, doc) {
     if (err) {
       res.send(err);
     } else {
@@ -90,7 +90,7 @@ app.put("/api/todos/:id", function(req, res) {
   var updateDoc = req.body;
   delete updateDoc._id;
 
-  collection.updateOne({_id: new objectID(req.params.id)}, updateDoc, function(err, doc) {
+  db.collection("todos").updateOne({_id: new objectID(req.params.id)}, updateDoc, function(err, doc) {
     if (err) {
       res.send(err);
     } else {
@@ -101,7 +101,7 @@ app.put("/api/todos/:id", function(req, res) {
 
 // DELETE: delete a todo by id
 app.delete("/api/todos/:id", function(req, res) {
-  collection.deleteOne({_id: new objectID(req.params.id)}, function(err, result) {
+  db.collection("todos").deleteOne({_id: new objectID(req.params.id)}, function(err, result) {
     if (err) {
       res.send(err);
     } else {
