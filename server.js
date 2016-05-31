@@ -57,7 +57,7 @@ app.get("/api/todos", function(req, res) {
 // POST: create a new todo
 app.post("/api/todos", function(req, res) {
   var newTodo = req.body;
-
+  newTodo.isComplete = false;
   if (!(req.body.description)) {
     res.send(err);
   }
