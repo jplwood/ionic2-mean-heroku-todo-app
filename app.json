@@ -2,5 +2,7 @@
   "name": "A MEAN Ionic 2 Todo App",
   "description": "A simple Ionic 2 and MEAN Todo App that's ready for Heroku",
   "repository": "https://github.com/jplwood/ionic2-mean-heroku-todo-app",
-  "keywords": ["ionic 2", "Angular 2", "node", "express", "heroku", "static"]
+  "logo": "http://ionicframework.com/img/ionic-logo-blog.png",
+  "keywords": ["ionic 2", "Angular 2", "node", "express", "heroku", "static"],
+  "addons": ["mongolab"]
 }
