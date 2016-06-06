@@ -15,7 +15,7 @@ app.use(cors()); // CORS (Cross-Origin Resource Sharing) headers to support Cros
 app.use(express.static("www")); // Our Ionic app build (kept up-to-date by the Ionic CLI using 'ionic serve')
 
 
-var MONGODB_URI = process.env.MONGODB_URI || 'mongodb://heroku_g24xsxd8:ur8k708rh1qqgr17luq6satqct@ds045622.mlab.com:45622/heroku_g24xsxd8'
+var MONGODB_URI = process.env.MONGODB_URI; 
 
 // Initialize database connection and then start the server.
 mongoClient.connect(MONGODB_URI, function (err, database) {
@@ -39,16 +39,22 @@ mongoClient.connect(MONGODB_URI, function (err, database) {
 
 // Todo API Routes
 
-
+// Error handler for the api
+function handleError(res, reason, message, code) {
+  console.log("API Error: " + reason);
+  res.status(code || 500).json({"error": message});
+}
 
 /*  Endpoint --> "/api/todos"  */
 
 // GET: retrieve all todos
 app.get("/api/todos", function(req, res) {
+  console.log("Received request to get all todos")
   db.collection("todos").find({}).toArray(function(err, docs) {
     if (err) {
       res.send(err);
     } else {
+      console.log(docs)
       res.status(200).json(docs);
     }
   });
@@ -56,16 +62,22 @@ app.get("/api/todos", function(req, res) {
 
 // POST: create a new todo
 app.post("/api/todos", function(req, res) {
-  var newTodo = req.body;
-  newTodo.isComplete = false;
+console.log("Received request to add a todo. ");
   if (!(req.body.description)) {
     res.send(err);
   }
+  var newTodo = {
+    description: req.body.description,
+    isComplete: false
+  }
+
+  console.log("Req: " + JSON.stringify(req.body));
 
   db.collection("todos").insertOne(newTodo, function(err, doc) {
     if (err) {
-      res.send(err);
+      handleError(res, err.message, "Failed to add todo");
     } else {
+      console.log("Added todo!")
       res.status(201).json(doc.ops[0]);
     }
   });
@@ -76,7 +88,7 @@ app.post("/api/todos", function(req, res) {
 
 // GET: retrieve a todo by id
 app.get("/api/todos/:id", function(req, res) {
-  db.collection("todos").findOne({ _id: new objectID(req.params.id) }, function(err, doc) {
+  db.collection("todos").findOne({ _id: new ObjectID(req.params.id) }, function(err, doc) {
     if (err) {
       res.send(err);
     } else {
@@ -87,13 +99,15 @@ app.get("/api/todos/:id", function(req, res) {
 
 // PUT: update a todo by id
 app.put("/api/todos/:id", function(req, res) {
+  console.log("The Request Body for update: " + JSON.stringify(req.body));
   var updateDoc = req.body;
   delete updateDoc._id;
-
-  db.collection("todos").updateOne({_id: new objectID(req.params.id)}, updateDoc, function(err, doc) {
+  console.log("Update Doc will be: " + JSON.stringify(updateDoc));
+  db.collection("todos").updateOne({_id: new ObjectID(req.params.id)}, updateDoc, function(err, doc) {
     if (err) {
-      res.send(err);
+      handleError(res, err.message, "Failed to update todo");
     } else {
+      console.log("The new document is: " + doc)
       res.status(204).end();
     }
   });
@@ -101,9 +115,9 @@ app.put("/api/todos/:id", function(req, res) {
 
 // DELETE: delete a todo by id
 app.delete("/api/todos/:id", function(req, res) {
-  db.collection("todos").deleteOne({_id: new objectID(req.params.id)}, function(err, result) {
+  db.collection("todos").deleteOne({_id: new ObjectID(req.params.id)}, function(err, result) {
     if (err) {
-      res.send(err);
+      handleError(res, err.message, "Failed to delete todo");
     } else {
       res.status(204).end();
     }

@@ -8,3 +8,59 @@
 // App Shared Sass variables belong in app.variables.scss.
 
 @import '../pages/home/home';
+@import "../pages/todo-edit/todo-edit";
+
+h2 {
+  color: color($colors, dark);
+  font-size: 1.7rem;
+  margin:10px 0 0;
+  small {
+    color: lighten(color($colors, dark), 20%);
+    font-weight: normal;
+  }
+}
+
+.item {
+  border-bottom:1px solid color($colors, dark);
+  margin-bottom:16px;
+}
+
+ion-list {
+  .item {
+    p {
+      font-size:1.6rem;
+    }
+  }
+  >ion-item-sliding {
+    border-bottom: 1px solid color($colors, light);
+
+    .item,
+    &:last-child .item {
+      border:none;
+      margin:0;
+    }
+
+
+  }
+
+
+
+  &.complete {
+    p {
+      text-decoration: line-through;
+      font-style: italic;
+    }
+  }
+}
+
+ion-textarea{
+  .text-input {
+    font-size: 1.6rem;
+    color: color($colors, dark);
+    margin:0;
+    padding:8px;
+    border:1px solid color($colors, light);
+    border-radius:3px;
+
+  }
+}
