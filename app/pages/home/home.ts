@@ -11,15 +11,14 @@ export class HomePage {
   public todos: Todo[];
   selectedTodo: Todo;
 
-  constructor(public todoService: TodoService, public nav: NavController, public navParams: NavParams ) {
-    console.log("constructing homepage");
+  constructor(public todoService: TodoService,
+              public nav: NavController,
+              public navParams: NavParams ) {
     this.loadTodos();
     this.selectedTodo = navParams.get('todo');
-    console.log(JSON.stringify(this.todos));
   }
 
   loadTodos() {
-    console.log("calling todoservice to load todos");
     this.todoService.getAll()
       .then(data => {
         this.todos = data;
@@ -51,6 +50,5 @@ export class HomePage {
         .then(response => {
           this.todos.splice(index, 1);
         });
-
   }
 }

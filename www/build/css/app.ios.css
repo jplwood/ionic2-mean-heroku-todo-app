@@ -8275,23 +8275,15 @@ h2 {
     color: #555555;
     font-weight: normal; }
 
-.item {
-  border-bottom: 1px solid #222;
-  margin-bottom: 16px; }
-
-ion-list .item p {
-  font-size: 1.6rem; }
-
 ion-list > ion-item-sliding {
   border-bottom: 1px solid #f4f4f4; }
   ion-list > ion-item-sliding .item,
   ion-list > ion-item-sliding:last-child .item {
     border: none;
     margin: 0; }
-
-ion-list.complete p {
-  text-decoration: line-through;
-  font-style: italic; }
+  ion-list > ion-item-sliding .completed {
+    text-decoration: line-through;
+    font-style: italic; }
 
 ion-textarea .text-input {
   font-size: 1.6rem;

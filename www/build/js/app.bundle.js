@@ -51,14 +51,11 @@ var HomePage = (function () {
         this.todoService = todoService;
         this.nav = nav;
         this.navParams = navParams;
-        console.log("constructing homepage");
         this.loadTodos();
         this.selectedTodo = navParams.get('todo');
-        console.log(JSON.stringify(this.todos));
     }
     HomePage.prototype.loadTodos = function () {
         var _this = this;
-        console.log("calling todoservice to load todos");
         this.todoService.getAll()
             .then(function (data) {
             _this.todos = data;
@@ -113,12 +110,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var ionic_angular_1 = require('ionic-angular');
 var todo_service_1 = require('../../providers/todo-service/todo-service');
-/*
-  Generated class for the TodoEditPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 var TodoEditPage = (function () {
     function TodoEditPage(todoService, nav, navParams) {
         this.todoService = todoService;
@@ -133,7 +124,7 @@ var TodoEditPage = (function () {
         this.todo.description = updatedDescription;
         this.todoService.update(this.todo)
             .then(function (response) {
-            _this.nav.pop(); //go back to todo list
+            _this.nav.pop(); // go back to todo list
         });
     };
     TodoEditPage.prototype.deleteTodo = function () {
@@ -202,21 +193,8 @@ var TodoService = (function () {
         var _this = this;
         var body = JSON.stringify({ description: todo });
         var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        console.log("About to send request to add todo: " + todo + " or in JSON format: " + JSON.stringify({ description: todo }) + " with the headers: " + headers);
         return new Promise(function (resolve) {
-            console.log("sending http post now...");
             _this.http.post(_this.todosUrl, body, { headers: headers })
-                .map(function (res) { return res.json(); })
-                .subscribe(function (data) {
-                _this.data = data;
-                resolve(_this.data);
-            });
-        });
-    };
-    TodoService.prototype.getById = function (id) {
-        var _this = this;
-        return new Promise(function (resolve) {
-            _this.http.get(_this.todosUrl + id)
                 .map(function (res) { return res.json(); })
                 .subscribe(function (data) {
                 _this.data = data;
@@ -227,7 +205,6 @@ var TodoService = (function () {
     TodoService.prototype.update = function (todo) {
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
-        console.log("About to update:" + JSON.stringify(todo));
         var url = this.todosUrl + "/" + todo._id;
         return this.http.put(url, JSON.stringify(todo), { headers: headers })
             .toPromise()
@@ -238,7 +215,6 @@ var TodoService = (function () {
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
         var url = this.todosUrl + "/" + todo._id;
-        console.log("Sending HTTP request to delete todo at: " + url);
         return this.http.delete(url, headers)
             .toPromise()
             .catch(this.handleError);

@@ -1,6 +1,6 @@
 <ion-navbar primary *navbar>
   <ion-title>
-    One MEAN Ionic 2 App
+    MEAN Ionic 2 Todo App
   </ion-title>
 </ion-navbar>
 
@@ -19,7 +19,7 @@
     <ion-item-sliding #slidingItem *ngFor="let todo of todos; let index = index" [class.complete]="todo.isComplete">
       <ion-item>
         <ion-checkbox (click)="toggleComplete(todo, index)" [checked]="todo.isComplete"></ion-checkbox>
-        <ion-item text-wrap item-left>{{ todo.description }}</ion-item>
+        <ion-item text-wrap item-left [class.completed]="todo.isComplete">{{ todo.description }}</ion-item>
       </ion-item>
       <ion-item-options>
         <button (click)="navToEdit($event, todo, index, slidingItem)">Edit</button>

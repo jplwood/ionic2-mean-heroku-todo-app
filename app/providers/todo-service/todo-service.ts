@@ -40,10 +40,8 @@ export class TodoService {
   add(todo:string): Promise<Todo> {
     let body = JSON.stringify({description: todo});
     let headers = new Headers({'Content-Type': 'application/json'});
-    console.log("About to send request to add todo: " + todo + " or in JSON format: " + JSON.stringify({description: todo}) +" with the headers: " + headers);
 
     return new Promise(resolve => {
-      console.log("sending http post now...");
       this.http.post(this.todosUrl, body, {headers: headers})
            .map(res => res.json())
            .subscribe(data => {
@@ -53,21 +51,9 @@ export class TodoService {
     });
   }
 
-  getById(id) {
-      return new Promise(resolve => {
-        this.http.get(this.todosUrl + id)
-            .map(res => res.json())
-            .subscribe(data => {
-              this.data = data;
-              resolve(this.data);
-            })
-      })
-  }
-
   update(todo) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    console.log("About to update:" + JSON.stringify(todo))
     let url = `${this.todosUrl}/${todo._id}`;
 
     return this.http.put(url, JSON.stringify(todo), {headers: headers})
@@ -81,7 +67,6 @@ export class TodoService {
     headers.append('Content-Type', 'application/json');
 
     let url = `${this.todosUrl}/${todo._id}`;
-    console.log("Sending HTTP request to delete todo at: " + url);
 
     return this.http.delete(url, headers)
                .toPromise()
@@ -93,5 +78,4 @@ export class TodoService {
       console.error(error);
       return Observable.throw(error.json().error || 'Server error');
   }
-
 }

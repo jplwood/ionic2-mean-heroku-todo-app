@@ -9,12 +9,9 @@
 </ion-navbar>
 
 <ion-content padding class="todo-edit">
-  <h2>
-    Description
-    <small item-right>Status: <span italic>{{ todo.isComplete ? "Complete" : "Incomplete" }}</span></small>
-  </h2>
-
+  <h2>Description</h2>
   <ion-textarea #updatedTodo value="{{todo.description}}"></ion-textarea>
+  <small>Status: {{ todo.isComplete ? "Complete" : "Incomplete" }}</small>
 
   <ion-row>
     <ion-col width-40>
@@ -28,7 +25,7 @@
       </button>
     </ion-col>
     <ion-col width-20>
-      <button danger (click)="deleteTodo()">
+      <button danger block (click)="deleteTodo()">
         <ion-icon name="trash"></ion-icon>
       </button>
     </ion-col>

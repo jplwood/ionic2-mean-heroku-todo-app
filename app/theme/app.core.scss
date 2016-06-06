@@ -20,17 +20,7 @@ h2 {
   }
 }
 
-.item {
-  border-bottom:1px solid color($colors, dark);
-  margin-bottom:16px;
-}
-
 ion-list {
-  .item {
-    p {
-      font-size:1.6rem;
-    }
-  }
   >ion-item-sliding {
     border-bottom: 1px solid color($colors, light);
 
@@ -40,15 +30,9 @@ ion-list {
       margin:0;
     }
 
-
-  }
-
-
-
-  &.complete {
-    p {
-      text-decoration: line-through;
-      font-style: italic;
+    .completed {
+        text-decoration: line-through;
+        font-style: italic;
     }
   }
 }
@@ -61,6 +45,5 @@ ion-textarea{
     padding:8px;
     border:1px solid color($colors, light);
     border-radius:3px;
-
   }
 }
