@@ -5,73 +5,47 @@ import {Observable} from 'rxjs/Observable';
 import {Todo} from '../../todo.ts';
 
 
-
-/*
-  Generated class for the TodoService provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 @Injectable()
 export class TodoService {
-  data: any = null;
   todosUrl = "/api/todos"
 
   constructor(public http: Http) {}
 
-  getAll(): Promise<Todo[]> {
-
-    if (this.data) {
-      // already loaded data
-      return Promise.resolve(this.data);
-    }
-
-    // don't have the data yet
-    return new Promise(resolve => {
-      this.http.get(this.todosUrl)
-        .map(res => res.json())
-        .subscribe(data => {
-          this.data = data;
-          resolve(this.data);
-        });
-    });
+  // Get all todos
+  load(): Observable<Todo[]> {
+    return this.http.get(this.todosUrl)
+               .map(res => res.json())
+               .catch(this.handleError);
   }
 
-  add(todo:string): Promise<Todo> {
+  // Add a todo-edit
+  add(todo: string): Observable<Todo> {
     let body = JSON.stringify({description: todo});
     let headers = new Headers({'Content-Type': 'application/json'});
 
-    return new Promise(resolve => {
-      this.http.post(this.todosUrl, body, {headers: headers})
-           .map(res => res.json())
-           .subscribe(data => {
-             this.data = data;
-             resolve(this.data);
-           });
-    });
-  }
-
-  update(todo) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    let url = `${this.todosUrl}/${todo._id}`;
-
-    return this.http.put(url, JSON.stringify(todo), {headers: headers})
-                    .toPromise()
-                    .then(() => todo) //See mdn.io/arrowfunctions
+    return this.http.post(this.todosUrl, body, {headers: headers})
+                    .map(res => res.json())
                     .catch(this.handleError);
   }
 
-  delete(todo) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
+  // Update a todo
+  update(todo: Todo) {
     let url = `${this.todosUrl}/${todo._id}`;
+    let body = JSON.stringify(todo)
+    let headers = new Headers({'Content-Type': 'application/json'});
+
+    return this.http.put(url, body, {headers: headers})
+                    .map(() => todo) //See mdn.io/arrowfunctions
+                    .catch(this.handleError);
+  }
+
+  // Delete a todo
+  delete(todo: Todo) {
+    let url = `${this.todosUrl}/${todo._id}`;
+    let headers = new Headers({'Content-Type': 'application/json'});
 
     return this.http.delete(url, headers)
-               .toPromise()
                .catch(this.handleError);
-
   }
 
   handleError(error) {

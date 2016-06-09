@@ -6,8 +6,7 @@ var app = express();
 var mongodb = require('mongodb'),
     mongoClient = mongodb.MongoClient,
     ObjectID = mongodb.ObjectID, // Used in API endpoints
-    db, // We'll initialize connection below
-    collection;
+    db; // We'll initialize connection below
 
 app.use(bodyParser.json());
 app.set('port', process.env.PORT || 8080);
@@ -15,7 +14,7 @@ app.use(cors()); // CORS (Cross-Origin Resource Sharing) headers to support Cros
 app.use(express.static("www")); // Our Ionic app build (kept up-to-date by the Ionic CLI using 'ionic serve')
 
 
-var MONGODB_URI = process.env.MONGODB_URI;
+var MONGODB_URI = process.env.MONGODB_URI || 'mongodb://heroku_g24xsxd8:ur8k708rh1qqgr17luq6satqct@ds045622.mlab.com:45622/heroku_g24xsxd8';
 
 // Initialize database connection and then start the server.
 mongoClient.connect(MONGODB_URI, function (err, database) {
@@ -24,7 +23,6 @@ mongoClient.connect(MONGODB_URI, function (err, database) {
   }
 
   db = database; // Our database object from mLab
-  //collection = db.collection("todos"); // Our todos collection
 
   console.log("Database connection ready");
 
@@ -35,14 +33,7 @@ mongoClient.connect(MONGODB_URI, function (err, database) {
 });
 
 
-
-// Todo API Routes
-
-// Error handler for the api
-function handleError(res, reason, message, code) {
-  console.log("API Error: " + reason);
-  res.status(code || 500).json({"error": message});
-}
+// Todo API Routes Will Go Below
 
 /*
  *  Endpoint --> "/api/todos"
@@ -52,7 +43,7 @@ function handleError(res, reason, message, code) {
 app.get("/api/todos", function(req, res) {
   db.collection("todos").find({}).toArray(function(err, docs) {
     if (err) {
-      res.send(err);
+      handleError(res, err.message, "Failed to get todos");
     } else {
       res.status(200).json(docs);
     }
@@ -68,7 +59,6 @@ app.post("/api/todos", function(req, res) {
     description: req.body.description,
     isComplete: false
   }
-
 
   db.collection("todos").insertOne(newTodo, function(err, doc) {
     if (err) {
@@ -99,6 +89,7 @@ app.get("/api/todos/:id", function(req, res) {
 app.put("/api/todos/:id", function(req, res) {
   var updateTodo = req.body;
   delete updateTodo._id;
+
   db.collection("todos").updateOne({_id: new ObjectID(req.params.id)}, updateTodo, function(err, doc) {
     if (err) {
       handleError(res, err.message, "Failed to update todo");
@@ -118,3 +109,9 @@ app.delete("/api/todos/:id", function(req, res) {
     }
   });
 });
+
+// Error handler for the api
+function handleError(res, reason, message, code) {
+  console.log("API Error: " + reason);
+  res.status(code || 500).json({"Error": message});
+}

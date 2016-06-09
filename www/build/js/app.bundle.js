@@ -56,33 +56,35 @@ var HomePage = (function () {
     }
     HomePage.prototype.loadTodos = function () {
         var _this = this;
-        this.todoService.getAll()
-            .then(function (data) {
+        this.todoService.load()
+            .subscribe(function (data) {
             _this.todos = data;
         });
     };
     HomePage.prototype.addTodo = function (todo) {
         var _this = this;
         this.todoService.add(todo)
-            .then(function (data) {
+            .subscribe(function (data) {
             _this.todos.push(data);
         });
     };
-    HomePage.prototype.toggleComplete = function (todo, index) {
+    HomePage.prototype.toggleComplete = function (todo) {
         todo.isComplete = !todo.isComplete;
-        this.todoService.update(todo);
+        this.todoService.update(todo)
+            .subscribe();
     };
-    HomePage.prototype.navToEdit = function (event, todo, index, slidingItem) {
+    HomePage.prototype.navToEdit = function (todo, index, slidingItem) {
         slidingItem.close();
         this.nav.push(todo_edit_1.TodoEditPage, {
             todo: todo,
-            todos: this.todos
+            todos: this.todos,
+            index: index
         });
     };
     HomePage.prototype.deleteTodo = function (todo, index) {
         var _this = this;
         this.todoService.delete(todo)
-            .then(function (response) {
+            .subscribe(function (response) {
             _this.todos.splice(index, 1);
         });
     };
@@ -123,14 +125,14 @@ var TodoEditPage = (function () {
         var _this = this;
         this.todo.description = updatedDescription;
         this.todoService.update(this.todo)
-            .then(function (response) {
+            .subscribe(function (response) {
             _this.nav.pop(); // go back to todo list
         });
     };
     TodoEditPage.prototype.deleteTodo = function () {
         var _this = this;
         this.todoService.delete(this.todo)
-            .then(function (response) {
+            .subscribe(function (response) {
             _this.todos.splice(_this.index, 1); // remove the todo
             _this.nav.pop(); //go back to todo list
         });
@@ -161,62 +163,39 @@ var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 require('rxjs/add/operator/map');
 var Observable_1 = require('rxjs/Observable');
-/*
-  Generated class for the TodoService provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 var TodoService = (function () {
     function TodoService(http) {
         this.http = http;
-        this.data = null;
         this.todosUrl = "/api/todos";
     }
-    TodoService.prototype.getAll = function () {
-        var _this = this;
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
-        // don't have the data yet
-        return new Promise(function (resolve) {
-            _this.http.get(_this.todosUrl)
-                .map(function (res) { return res.json(); })
-                .subscribe(function (data) {
-                _this.data = data;
-                resolve(_this.data);
-            });
-        });
-    };
-    TodoService.prototype.add = function (todo) {
-        var _this = this;
-        var body = JSON.stringify({ description: todo });
-        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
-        return new Promise(function (resolve) {
-            _this.http.post(_this.todosUrl, body, { headers: headers })
-                .map(function (res) { return res.json(); })
-                .subscribe(function (data) {
-                _this.data = data;
-                resolve(_this.data);
-            });
-        });
-    };
-    TodoService.prototype.update = function (todo) {
-        var headers = new http_1.Headers();
-        headers.append('Content-Type', 'application/json');
-        var url = this.todosUrl + "/" + todo._id;
-        return this.http.put(url, JSON.stringify(todo), { headers: headers })
-            .toPromise()
-            .then(function () { return todo; }) //See mdn.io/arrowfunctions
+    // Get all todos
+    TodoService.prototype.load = function () {
+        return this.http.get(this.todosUrl)
+            .map(function (res) { return res.json(); })
             .catch(this.handleError);
     };
-    TodoService.prototype.delete = function (todo) {
-        var headers = new http_1.Headers();
-        headers.append('Content-Type', 'application/json');
+    // Add a todo-edit
+    TodoService.prototype.add = function (todo) {
+        var body = JSON.stringify({ description: todo });
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        return this.http.post(this.todosUrl, body, { headers: headers })
+            .map(function (res) { return res.json(); })
+            .catch(this.handleError);
+    };
+    // Update a todo
+    TodoService.prototype.update = function (todo) {
         var url = this.todosUrl + "/" + todo._id;
+        var body = JSON.stringify(todo);
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        return this.http.put(url, body, { headers: headers })
+            .map(function () { return todo; }) //See mdn.io/arrowfunctions
+            .catch(this.handleError);
+    };
+    // Delete a todo
+    TodoService.prototype.delete = function (todo) {
+        var url = this.todosUrl + "/" + todo._id;
+        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
         return this.http.delete(url, headers)
-            .toPromise()
             .catch(this.handleError);
     };
     TodoService.prototype.handleError = function (error) {

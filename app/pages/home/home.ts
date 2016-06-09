@@ -19,35 +19,37 @@ export class HomePage {
   }
 
   loadTodos() {
-    this.todoService.getAll()
-      .then(data => {
+    this.todoService.load()
+      .subscribe(data => {
         this.todos = data;
       })
   }
 
   addTodo(todo:string) {
     this.todoService.add(todo)
-        .then(data  => {
+        .subscribe(data  => {
           this.todos.push(data)
         });
   }
 
-  toggleComplete(todo: Todo, index:number) {
+  toggleComplete(todo: Todo) {
     todo.isComplete = !todo.isComplete;
-    this.todoService.update(todo);
+    this.todoService.update(todo)
+        .subscribe();
   }
 
-  navToEdit(event, todo: Todo, index: number, slidingItem: ItemSliding) {
+  navToEdit(todo: Todo, index: number, slidingItem: ItemSliding) {
     slidingItem.close()
     this.nav.push(TodoEditPage, {
       todo: todo,
-      todos: this.todos
+      todos: this.todos,
+      index: index
     });
   }
 
   deleteTodo(todo: Todo, index:number) {
     this.todoService.delete(todo)
-        .then(response => {
+        .subscribe(response => {
           this.todos.splice(index, 1);
         });
   }
