@@ -1,8 +1,9 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {Component} from "@angular/core";
+import {NavController, NavParams} from 'ionic-angular';
 import {TodoService} from '../../providers/todo-service/todo-service';
 import {Todo} from '../../todo.ts';
 
-@Page({
+@Component({
   templateUrl: 'build/pages/todo-edit/todo-edit.html',
   providers: [TodoService]
 })

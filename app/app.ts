@@ -1,11 +1,11 @@
-import {App, Platform} from 'ionic-angular';
+import {Component} from "@angular/core";
+import {ionicBootstrap, Platform} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {HomePage} from './pages/home/home';
 
 
-@App({
+@Component({
   template: '<ion-nav [root]="rootPage"></ion-nav>',
-  config: {} // http://ionicframework.com/docs/v2/api/config/Config/
 })
 export class MyApp {
   rootPage: any = HomePage;
@@ -18,3 +18,5 @@ export class MyApp {
     });
   }
 }
+
+ionicBootstrap(MyApp);
