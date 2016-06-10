@@ -1,5 +1,5 @@
-import {Component} from "@angular/core";
-import {NavController, NavParams, ItemSliding, Item} from 'ionic-angular';
+import
+import {Page, NavController, NavParams, ItemSliding, Item} from 'ionic-angular';
 import {TodoEditPage} from '../todo-edit/todo-edit';
 import {TodoService} from '../../providers/todo-service/todo-service';
 import {Todo} from '../../todo.ts';
@@ -39,6 +39,13 @@ export class HomePage {
         .subscribe();
   }
 
+  deleteTodo(todo: Todo, index:number) {
+    this.todoService.delete(todo)
+        .subscribe(response => {
+          this.todos.splice(index, 1);
+        });
+  }
+
   navToEdit(todo: Todo, index: number, slidingItem: ItemSliding) {
     slidingItem.close()
     this.nav.push(TodoEditPage, {
@@ -46,12 +53,5 @@ export class HomePage {
       todos: this.todos,
       index: index
     });
-  }
-
-  deleteTodo(todo: Todo, index:number) {
-    this.todoService.delete(todo)
-        .subscribe(response => {
-          this.todos.splice(index, 1);
-        });
   }
 }
