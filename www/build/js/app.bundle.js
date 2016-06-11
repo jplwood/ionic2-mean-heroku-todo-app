@@ -59,20 +59,20 @@ var HomePage = (function () {
     HomePage.prototype.loadTodos = function () {
         var _this = this;
         this.todoService.load()
-            .subscribe(function (data) {
-            _this.todos = data;
+            .subscribe(function (todoList) {
+            _this.todos = todoList;
         });
     };
     HomePage.prototype.addTodo = function (todo) {
         var _this = this;
         this.todoService.add(todo)
-            .subscribe(function (data) {
-            _this.todos.push(data);
+            .subscribe(function (newTodo) {
+            _this.todos.push(newTodo);
         });
     };
     HomePage.prototype.toggleComplete = function (todo) {
-        todo.isComplete = !todo.isComplete.
-            this.todoService.update(todo)
+        todo.isComplete = !todo.isComplete;
+        this.todoService.update(todo)
             .subscribe(function (updatedTodo) {
             todo = updatedTodo;
         });
@@ -80,7 +80,7 @@ var HomePage = (function () {
     HomePage.prototype.deleteTodo = function (todo, index) {
         var _this = this;
         this.todoService.delete(todo)
-            .subscribe(function (response) {
+            .subscribe(function (res) {
             _this.todos.splice(index, 1);
         });
     };
