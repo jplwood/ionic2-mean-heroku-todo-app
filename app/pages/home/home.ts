@@ -21,27 +21,29 @@ export class HomePage {
 
   loadTodos() {
     this.todoService.load()
-      .subscribe(data => {
-        this.todos = data;
+      .subscribe(todoList => {
+        this.todos = todoList;
       })
   }
 
   addTodo(todo:string) {
     this.todoService.add(todo)
-        .subscribe(data  => {
-          this.todos.push(data)
+        .subscribe(newTodo  => {
+          this.todos.push(newTodo);
         });
   }
 
   toggleComplete(todo: Todo) {
     todo.isComplete = !todo.isComplete;
     this.todoService.update(todo)
-        .subscribe();
+        .subscribe(updatedTodo => {
+          todo = updatedTodo;
+        });
   }
 
   deleteTodo(todo: Todo, index:number) {
     this.todoService.delete(todo)
-        .subscribe(response => {
+        .subscribe(res => {
           this.todos.splice(index, 1);
         });
   }
