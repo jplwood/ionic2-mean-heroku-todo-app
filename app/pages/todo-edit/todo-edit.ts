@@ -21,14 +21,14 @@ export class TodoEditPage {
   saveTodo(updatedDescription: string) {
     this.todo.description = updatedDescription;
     this.todoService.update(this.todo)
-        .subscribe(response => {
+        .subscribe(res => {
           this.nav.pop(); // go back to todo list
         });
   }
 
   deleteTodo() {
     this.todoService.delete(this.todo)
-      .subscribe(response => {
+      .subscribe(res => {
         this.todos.splice(this.index, 1); // remove the todo
         this.nav.pop(); //go back to todo list
       });

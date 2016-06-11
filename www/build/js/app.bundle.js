@@ -49,12 +49,10 @@ var ionic_angular_1 = require('ionic-angular');
 var todo_edit_1 = require('../todo-edit/todo-edit');
 var todo_service_1 = require('../../providers/todo-service/todo-service');
 var HomePage = (function () {
-    function HomePage(todoService, nav, navParams) {
+    function HomePage(todoService, nav) {
         this.todoService = todoService;
         this.nav = nav;
-        this.navParams = navParams;
         this.loadTodos();
-        this.selectedTodo = navParams.get('todo');
     }
     HomePage.prototype.loadTodos = function () {
         var _this = this;
@@ -84,8 +82,7 @@ var HomePage = (function () {
             _this.todos.splice(index, 1);
         });
     };
-    HomePage.prototype.navToEdit = function (todo, index, slidingItem) {
-        slidingItem.close();
+    HomePage.prototype.navToEdit = function (todo, index) {
         this.nav.push(todo_edit_1.TodoEditPage, {
             todo: todo,
             todos: this.todos,
@@ -97,7 +94,7 @@ var HomePage = (function () {
             templateUrl: 'build/pages/home/home.html',
             providers: [todo_service_1.TodoService]
         }), 
-        __metadata('design:paramtypes', [todo_service_1.TodoService, ionic_angular_1.NavController, ionic_angular_1.NavParams])
+        __metadata('design:paramtypes', [todo_service_1.TodoService, ionic_angular_1.NavController])
     ], HomePage);
     return HomePage;
 }());
@@ -130,14 +127,14 @@ var TodoEditPage = (function () {
         var _this = this;
         this.todo.description = updatedDescription;
         this.todoService.update(this.todo)
-            .subscribe(function (response) {
+            .subscribe(function (res) {
             _this.nav.pop(); // go back to todo list
         });
     };
     TodoEditPage.prototype.deleteTodo = function () {
         var _this = this;
         this.todoService.delete(this.todo)
-            .subscribe(function (response) {
+            .subscribe(function (res) {
             _this.todos.splice(_this.index, 1); // remove the todo
             _this.nav.pop(); //go back to todo list
         });
