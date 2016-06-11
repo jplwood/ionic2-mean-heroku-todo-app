@@ -16,16 +16,16 @@
 
   <h2>Todo List <small>Swipe a todo to edit or delete</small></h2>
   <ion-list no-lines>
-    <ion-item-sliding #slidingItem *ngFor="let todo of todos; let index = index" [class.complete]="todo.isComplete">
+    <ion-item-sliding #slidingItem *ngFor="let todo of todos; let index = index">
       <ion-item>
-        <ion-checkbox (click)="toggleComplete(todo, index)" [checked]="todo.isComplete"></ion-checkbox>
+        <ion-checkbox (click)="toggleComplete(todo)" [checked]="todo.isComplete"></ion-checkbox>
         <ion-item text-wrap item-left [class.completed]="todo.isComplete">
           {{ todo.description }}
         </ion-item>
       </ion-item>
       <ion-item-options>
         <button (click)="navToEdit(todo, index, slidingItem)">Edit</button>
-        <button danger (click)="deleteTodo(todo, index);">
+        <button danger (click)="deleteTodo(todo, index)">
           <ion-icon name="trash"></ion-icon>
         </button>
       </ion-item-options>
