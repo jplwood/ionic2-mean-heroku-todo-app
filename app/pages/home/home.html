@@ -23,7 +23,7 @@
           {{ todo.description }}
         </ion-item>
       </ion-item>
-      <ion-item-options>
+      <ion-item-options (ionSwipe)="navToEdit(todo, index); slidingItem.close()">
         <button (click)="navToEdit(todo, index); slidingItem.close()">Edit</button>
         <button danger (click)="deleteTodo(todo, index)">
           <ion-icon name="trash"></ion-icon>
